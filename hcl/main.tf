@@ -30,3 +30,17 @@ variable "password" {
 variable "url" {
   type = string
 }
+
+
+resource "vcd_vm_sizing_policy" "sizing1" {
+  name        = "sizing1"
+  description = "sizing1 description"
+  cpu {
+    shares                = "886"
+    limit_in_mhz          = "12375"
+    count                 = "9"
+    speed_in_mhz          = "2500"
+    cores_per_socket      = "3"
+    reservation_guarantee = "0.55"
+  }
+}
