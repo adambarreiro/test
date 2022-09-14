@@ -36,14 +36,6 @@ variable "url" {
 resource "vcd_vm_sizing_policy" "sizing1" {
   name        = "sizing1"
   description = "sizing1 description"
-  cpu {
-    shares                = "886"
-    limit_in_mhz          = "12375"
-    count                 = "9"
-    speed_in_mhz          = "2500"
-    cores_per_socket      = "3"
-    reservation_guarantee = "0.55"
-  }
 }
 
 resource "vcd_vm_sizing_policy" "sizing2" {
@@ -117,10 +109,11 @@ data "vcd_catalog_item" "my-first-item" {
 
 resource "vcd_vapp_vm" "test-vm" {
   vapp_name     = vcd_vapp.test-vapp.name
+  vdc = vcd_org_vdc.test-vdc.name
   name          = "vm"
   computer_name = "emptyVM"
-  memory        = 2048
-  cpus          = 2
+  memory        = 256
+  cpus          = 1
   cpu_cores     = 1
 
   os_type          = "sles10_64Guest"
