@@ -82,7 +82,7 @@ resource "vcd_org_vdc" "test-vdc" {
   storage_profile {
     name    = "*"
     enabled = true
-    limit   = 10240
+    limit   = 0
     default = true
   }
 
@@ -107,22 +107,11 @@ resource "vcd_vapp" "test-vapp" {
 
 data "vcd_catalog" "test-catalog" {
   org  = "test"
-  name = "cat-test-nsxt-backed"
+  name = "cat-test"
 }
 
 data "vcd_catalog_item" "my-first-item" {
   org     = "test"
   catalog = data.vcd_catalog.test-catalog.name
-  name    = "test_media_nsxt"
-}
-
-resource "vcd_vapp_vm" "test-vm" {
-  name          = "test1"
-  org           = "test"
-  vdc           = vcd_org_vdc.test-vdc.name
-  vapp_name     = vcd_vapp.test-vapp.name
-  catalog_name  = data.vcd_catalog.test-catalog.name
-  template_name = data.vcd_catalog_item.my-first-item.name
-  cpus          = 2
-  memory        = 2048
+  name    = "photon-hw11"
 }
