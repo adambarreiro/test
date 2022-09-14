@@ -94,8 +94,7 @@ resource "vcd_org_vdc" "test-vdc" {
   elasticity                 = false
   include_vm_memory_overhead = false
 
-  default_compute_policy_id = vcd_vm_sizing_policy.sizing1.id
-  vm_placement_policy_ids   = []
+  default_vm_sizing_policy_id  = vcd_vm_sizing_policy.sizing1.id
   vm_sizing_policy_ids      = [vcd_vm_sizing_policy.sizing1.id, vcd_vm_sizing_policy.sizing2.id]
 }
 
@@ -107,11 +106,25 @@ resource "vcd_vapp" "test-vapp" {
 
 data "vcd_catalog" "test-catalog" {
   org  = "test"
-  name = "cat-test"
+  name = "cat-test-nsxt-backed"
 }
 
 data "vcd_catalog_item" "my-first-item" {
   org     = "test"
   catalog = data.vcd_catalog.test-catalog.name
-  name    = "photon-hw11"
+  name    = "test_media_nsxt"
+}
+
+resource "vcd_vapp_vm" "test-vm" {
+  vapp_name     = vcd_vapp.test-vapp.name
+  name          = "vm"
+  computer_name = "emptyVM"
+  memory        = 2048
+  cpus          = 2
+  cpu_cores     = 1
+
+  os_type          = "sles10_64Guest"
+  hardware_version = "vmx-14"
+  catalog_name     = data.vcd_catalog.test-catalog.name
+  boot_image       = data.vcd_catalog_item.my-first-item.name
 }
